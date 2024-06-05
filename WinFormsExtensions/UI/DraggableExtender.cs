@@ -5,62 +5,56 @@ namespace WinFormsExtensions.UI
 {
 
     /// <summary>
-    /// マウスの左ボタンによるドラッグでフォームを移動可能にします。
+    /// Allows the form to be moved by dragging with the left mouse button.
     /// </summary>
-    public class DraggableExtender
-    {
+    public class DraggableExtender {
 
-        #region フィールド
+        #region Fields
 
         /// <summary>
-        /// 移動可能にするフォーム
+        /// The form to be made movable
         /// </summary>
         private Form targerForm;
 
         /// <summary>
-        /// マウスの左ボタンでドラッグ中の場合はtrue。それ以外はfalse。
+        /// True if dragging with the left mouse button, false otherwise.
         /// </summary>
         private bool isLeftDrag;
 
         /// <summary>
-        /// ドラッグ開始時のマウスカーソル位置
+        /// Mouse cursor position at the start of dragging
         /// </summary>
         private Point cursolOffset;
 
-        #endregion フィールド
+        #endregion Fields
 
-        #region プロパティ
+        #region Properties
 
         /// <summary>
-        /// ドラッグで移動させる場合はtrue。移動させない場合はfalse。
+        /// True if you want to move by dragging, false if you do not.
         /// </summary>
-        public bool Enabled
-        {
-            get
-            {
+        public bool Enabled {
+            get {
                 return enabled;
             }
-            set
-            {
+            set {
                 enabled = value;
             }
         }
 
         private bool enabled = true;
 
-        #endregion プロパティ
+        #endregion Properties
 
         /// <summary>
-        /// 初期化します。
+        /// Initializes the instance.
         /// </summary>
-        /// <param name="form">移動可能にするフォーム</param>
-        public DraggableExtender(Form form)
-        {
+        /// <param name="form">The form to be made movable</param>
+        public DraggableExtender(Form form) {
             targerForm = form;
 
-            // マウスカーソルの移動距離計測を開始します。
-            targerForm.MouseDown += (sender, e) =>
-            {
+            // Start measuring the distance the mouse cursor moves.
+            targerForm.MouseDown += (sender, e) => {
                 if (!enabled) { return; }
 
                 if (e.Button == MouseButtons.Left)
@@ -68,10 +62,9 @@ namespace WinFormsExtensions.UI
                     if (targerForm.FormBorderStyle == FormBorderStyle.None)
                     {
                         cursolOffset = new Point(-e.X, -e.Y);
-                    }
-                    else
+                    } else
                     {
-                        // マウスカーソル位置にウィンドウの境界線とタイトルバーの高さを加味する。
+                        // Add the window border and title bar height to the mouse cursor position.
                         cursolOffset = new Point(
                             -e.X - SystemInformation.FrameBorderSize.Width,
                             -e.Y - SystemInformation.CaptionHeight - SystemInformation.FrameBorderSize.Height);
@@ -81,9 +74,8 @@ namespace WinFormsExtensions.UI
                 }
             };
 
-            // マウスカーソルの移動距離の分だけフォームを移動します。
-            targerForm.MouseMove += (sender, e) =>
-            {
+            // Move the form by the distance the mouse cursor moves.
+            targerForm.MouseMove += (sender, e) => {
                 if (!enabled) { return; }
 
                 if (isLeftDrag)
@@ -94,9 +86,8 @@ namespace WinFormsExtensions.UI
                 }
             };
 
-            // マウスカーソルの移動距離計測を終了します。
-            targerForm.MouseUp += (sender, e) =>
-            {
+            // Stop measuring the distance the mouse cursor moves.
+            targerForm.MouseUp += (sender, e) => {
                 if (!enabled) { return; }
 
                 if (e.Button == MouseButtons.Left)
