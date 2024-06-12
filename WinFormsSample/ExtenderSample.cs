@@ -1,8 +1,8 @@
 using WinFormsExtensions.UI;
 
 namespace WinFormsSample {
-    public partial class ExtemderSample : Form {
-        public ExtemderSample() {
+    public partial class ExtenderSample : Form {
+        public ExtenderSample() {
             InitializeComponent();
 
             new DraggableExtender(this);
