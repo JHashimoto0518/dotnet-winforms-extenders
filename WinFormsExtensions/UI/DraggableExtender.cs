@@ -14,7 +14,7 @@ namespace WinFormsExtensions.UI
         /// <summary>
         /// The form to be made movable
         /// </summary>
-        private Form targerForm;
+        private readonly Form targetForm;
 
         /// <summary>
         /// True if dragging with the left mouse button, false otherwise.
@@ -51,15 +51,15 @@ namespace WinFormsExtensions.UI
         /// </summary>
         /// <param name="form">The form to be made movable</param>
         public DraggableExtender(Form form) {
-            targerForm = form;
+            targetForm = form;
 
             // Start measuring the distance the mouse cursor moves.
-            targerForm.MouseDown += (sender, e) => {
+            targetForm.MouseDown += (sender, e) => {
                 if (!enabled) { return; }
 
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (targerForm.FormBorderStyle == FormBorderStyle.None)
+                    if (targetForm.FormBorderStyle == FormBorderStyle.None)
                     {
                         cursolOffset = new Point(-e.X, -e.Y);
                     } else
@@ -75,19 +75,19 @@ namespace WinFormsExtensions.UI
             };
 
             // Move the form by the distance the mouse cursor moves.
-            targerForm.MouseMove += (sender, e) => {
+            targetForm.MouseMove += (sender, e) => {
                 if (!enabled) { return; }
 
                 if (isLeftDrag)
                 {
                     Point p = Control.MousePosition;
                     p.Offset(cursolOffset);
-                    targerForm.Location = p;
+                    targetForm.Location = p;
                 }
             };
 
             // Stop measuring the distance the mouse cursor moves.
-            targerForm.MouseUp += (sender, e) => {
+            targetForm.MouseUp += (sender, e) => {
                 if (!enabled) { return; }
 
                 if (e.Button == MouseButtons.Left)
