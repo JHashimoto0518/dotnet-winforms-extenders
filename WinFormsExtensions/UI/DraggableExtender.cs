@@ -7,7 +7,8 @@ namespace WinFormsExtensions.UI
     /// <summary>
     /// Allows the form to be moved by dragging with the left mouse button.
     /// </summary>
-    public class DraggableExtender {
+    public class DraggableExtender
+    {
 
         #region Fields
 
@@ -24,7 +25,7 @@ namespace WinFormsExtensions.UI
         /// <summary>
         /// Mouse cursor position at the start of dragging
         /// </summary>
-        private Point cursolOffset;
+        private Point cursorOffset;
 
         #endregion Fields
 
@@ -33,16 +34,7 @@ namespace WinFormsExtensions.UI
         /// <summary>
         /// True if you want to move by dragging, false if you do not.
         /// </summary>
-        public bool Enabled {
-            get {
-                return enabled;
-            }
-            set {
-                enabled = value;
-            }
-        }
-
-        private bool enabled = true;
+        public bool Enabled { get; set; } = true;
 
         #endregion Properties
 
@@ -50,22 +42,25 @@ namespace WinFormsExtensions.UI
         /// Initializes the instance.
         /// </summary>
         /// <param name="form">The form to be made movable</param>
-        public DraggableExtender(Form form) {
+        public DraggableExtender(Form form)
+        {
             targetForm = form;
 
             // Start measuring the distance the mouse cursor moves.
-            targetForm.MouseDown += (sender, e) => {
-                if (!enabled) { return; }
+            targetForm.MouseDown += (sender, e) =>
+            {
+                if (!Enabled) { return; }
 
                 if (e.Button == MouseButtons.Left)
                 {
                     if (targetForm.FormBorderStyle == FormBorderStyle.None)
                     {
-                        cursolOffset = new Point(-e.X, -e.Y);
-                    } else
+                        cursorOffset = new Point(-e.X, -e.Y);
+                    }
+                    else
                     {
                         // Add the window border and title bar height to the mouse cursor position.
-                        cursolOffset = new Point(
+                        cursorOffset = new Point(
                             -e.X - SystemInformation.FrameBorderSize.Width,
                             -e.Y - SystemInformation.CaptionHeight - SystemInformation.FrameBorderSize.Height);
                     }
@@ -75,20 +70,22 @@ namespace WinFormsExtensions.UI
             };
 
             // Move the form by the distance the mouse cursor moves.
-            targetForm.MouseMove += (sender, e) => {
-                if (!enabled) { return; }
+            targetForm.MouseMove += (sender, e) =>
+            {
+                if (!Enabled) { return; }
 
                 if (isLeftDrag)
                 {
                     Point p = Control.MousePosition;
-                    p.Offset(cursolOffset);
+                    p.Offset(cursorOffset);
                     targetForm.Location = p;
                 }
             };
 
             // Stop measuring the distance the mouse cursor moves.
-            targetForm.MouseUp += (sender, e) => {
-                if (!enabled) { return; }
+            targetForm.MouseUp += (sender, e) =>
+            {
+                if (!Enabled) { return; }
 
                 if (e.Button == MouseButtons.Left)
                 {
@@ -96,6 +93,5 @@ namespace WinFormsExtensions.UI
                 }
             };
         }
-
     }
 }
