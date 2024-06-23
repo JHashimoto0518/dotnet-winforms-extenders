@@ -1,14 +1,12 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace WinFormsExtensions.UI
-{
+namespace WinFormsExtensions.UI {
 
     /// <summary>
     /// Allows the form to be moved by dragging with the left mouse button.
     /// </summary>
-    public class DraggableExtender
-    {
+    public class DraggableExtender {
 
         #region Fields
 
@@ -42,23 +40,17 @@ namespace WinFormsExtensions.UI
         /// Initializes the instance.
         /// </summary>
         /// <param name="form">The form to be made movable</param>
-        public DraggableExtender(Form form)
-        {
+        public DraggableExtender(Form form) {
             targetForm = form;
 
             // Start measuring the distance the mouse cursor moves.
-            targetForm.MouseDown += (sender, e) =>
-            {
+            targetForm.MouseDown += (sender, e) => {
                 if (!Enabled) { return; }
 
-                if (e.Button == MouseButtons.Left)
-                {
-                    if (targetForm.FormBorderStyle == FormBorderStyle.None)
-                    {
+                if (e.Button == MouseButtons.Left) {
+                    if (targetForm.FormBorderStyle == FormBorderStyle.None) {
                         cursorOffset = new Point(-e.X, -e.Y);
-                    }
-                    else
-                    {
+                    } else {
                         // Add the window border and title bar height to the mouse cursor position.
                         cursorOffset = new Point(
                             -e.X - SystemInformation.FrameBorderSize.Width,
@@ -70,12 +62,10 @@ namespace WinFormsExtensions.UI
             };
 
             // Move the form by the distance the mouse cursor moves.
-            targetForm.MouseMove += (sender, e) =>
-            {
+            targetForm.MouseMove += (sender, e) => {
                 if (!Enabled) { return; }
 
-                if (isLeftDrag)
-                {
+                if (isLeftDrag) {
                     Point p = Control.MousePosition;
                     p.Offset(cursorOffset);
                     targetForm.Location = p;
@@ -83,12 +73,10 @@ namespace WinFormsExtensions.UI
             };
 
             // Stop measuring the distance the mouse cursor moves.
-            targetForm.MouseUp += (sender, e) =>
-            {
+            targetForm.MouseUp += (sender, e) => {
                 if (!Enabled) { return; }
 
-                if (e.Button == MouseButtons.Left)
-                {
+                if (e.Button == MouseButtons.Left) {
                     isLeftDrag = false;
                 }
             };
