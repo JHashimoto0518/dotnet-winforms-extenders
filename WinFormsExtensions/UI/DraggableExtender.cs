@@ -8,8 +8,6 @@ namespace WinFormsExtensions.UI {
     /// </summary>
     public class DraggableExtender {
 
-        #region Fields
-
         /// <summary>
         /// The form to be made movable
         /// </summary>
@@ -25,16 +23,10 @@ namespace WinFormsExtensions.UI {
         /// </summary>
         private Point cursorOffset;
 
-        #endregion Fields
-
-        #region Properties
-
         /// <summary>
         /// True if you want to move by dragging, false if you do not.
         /// </summary>
         public bool Enabled { get; set; } = true;
-
-        #endregion Properties
 
         /// <summary>
         /// Initializes the instance.
@@ -46,39 +38,36 @@ namespace WinFormsExtensions.UI {
             // Start measuring the distance the mouse cursor moves.
             targetForm.MouseDown += (sender, e) => {
                 if (!Enabled) { return; }
+                if (e.Button != MouseButtons.Left) { return; }
 
-                if (e.Button == MouseButtons.Left) {
-                    if (targetForm.FormBorderStyle == FormBorderStyle.None) {
-                        cursorOffset = new Point(-e.X, -e.Y);
-                    } else {
-                        // Add the window border and title bar height to the mouse cursor position.
-                        cursorOffset = new Point(
-                            -e.X - SystemInformation.FrameBorderSize.Width,
-                            -e.Y - SystemInformation.CaptionHeight - SystemInformation.FrameBorderSize.Height);
-                    }
-
-                    isLeftDrag = true;
+                if (targetForm.FormBorderStyle == FormBorderStyle.None) {
+                    cursorOffset = new Point(-e.X, -e.Y);
+                } else {
+                    // Add the window border and title bar height to the mouse cursor position.
+                    cursorOffset = new Point(
+                        -e.X - SystemInformation.FrameBorderSize.Width,
+                        -e.Y - SystemInformation.CaptionHeight - SystemInformation.FrameBorderSize.Height);
                 }
+
+                isLeftDrag = true;
             };
 
             // Move the form by the distance the mouse cursor moves.
             targetForm.MouseMove += (sender, e) => {
                 if (!Enabled) { return; }
+                if (!isLeftDrag) { return; }
 
-                if (isLeftDrag) {
-                    Point p = Control.MousePosition;
-                    p.Offset(cursorOffset);
-                    targetForm.Location = p;
-                }
+                Point p = Control.MousePosition;
+                p.Offset(cursorOffset);
+                targetForm.Location = p;
             };
 
             // Stop measuring the distance the mouse cursor moves.
             targetForm.MouseUp += (sender, e) => {
                 if (!Enabled) { return; }
+                if (e.Button != MouseButtons.Left) { return; }
 
-                if (e.Button == MouseButtons.Left) {
-                    isLeftDrag = false;
-                }
+                isLeftDrag = false;
             };
         }
     }
